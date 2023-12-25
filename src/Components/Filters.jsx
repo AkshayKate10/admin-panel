@@ -1,11 +1,30 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import * as action from "../Store/Actions";
 
 import { branches, types, statuses } from "../Constants/constants";
 
-function Filters() {
+function Filters({ allRows }) {
+  const dispatch = useDispatch();
+
+  const currentFilter = useSelector((state) => state.currentFilter);
+
+  const { fromDate, toDate, branch, type, status } = currentFilter;
+
+  const handleChange = (event, field) => {
+    dispatch({
+      type: action.SET_CURRENT_FILTERS,
+      value: { value: event.target.value, field },
+    });
+  };
+  useEffect(() => {
+    dispatch({ type: action.SET_FILTERED_ROWS });
+  }, [branch, type, status]);
   return (
     <div>
-      <h1>Filters</h1>
+      <div>
+        <label>Total ({allRows.length})</label>
+      </div>
       <div className="allFilters">
         <div className="filter">
           <label>From</label>
@@ -17,7 +36,7 @@ function Filters() {
         </div>
         <div className="filter">
           <label htmlFor="branch">Branch</label>
-          <select>
+          <select onChange={(e) => handleChange(e, "branch")} value={branch}>
             {branches.map((item) => {
               return <option value={item.value}>{item.label}</option>;
             })}
@@ -25,7 +44,7 @@ function Filters() {
         </div>
         <div className="filter">
           <label>Type</label>
-          <select>
+          <select onChange={(e) => handleChange(e, "type")} value={type}>
             {types.map((item) => {
               return <option value={item.value}>{item.label}</option>;
             })}
@@ -33,7 +52,7 @@ function Filters() {
         </div>
         <div className="filter">
           <label>Status</label>
-          <select>
+          <select onChange={(e) => handleChange(e, "status")} value={status}>
             {statuses.map((item) => {
               return <option value={item.value}>{item.label}</option>;
             })}

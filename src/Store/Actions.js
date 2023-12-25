@@ -1,1 +1,4 @@
-
+export const SET_DATA = "SET_DATA";
+export const SET_FILTERED_ROWS = "SET_FILTERED_ROWS";
+export const SET_CURRENT_FILTERS = "SET_CURRENT_FILTERS";
+export const DELETE_ROW = "DELETE_ROW";

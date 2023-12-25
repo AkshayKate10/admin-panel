@@ -1,40 +1,61 @@
 import React from "react";
+import { isEmpty } from "lodash";
+import { tableHeaders, sortLogo } from "../Constants/constants";
+import { useDispatch } from "react-redux";
+import * as action from "../Store/Actions";
 
-function Table() {
+function Table({ filteredRows, allRows }) {
+  const dispatch = useDispatch();
+  const deleteHandle = (id) => {
+    dispatch({ type: action.DELETE_ROW, value: id });
+  };
   return (
     <div>
-      <h1>Table</h1>
       <table>
         <thead>
-          <tr>
-            <th>a</th>
-            <th>b</th>
-            <th>c</th>
+          <tr key="table-headings">
+            {tableHeaders.map((tableHead, index) => {
+              if (tableHead === "DATE")
+                return (
+                  <th key={index} className="date-header">
+                    {tableHead} {sortLogo}
+                  </th>
+                );
+
+              return <th key={index}>{tableHead}</th>;
+            })}
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>X</td>
-            <td>Y</td>
-            <td>Z</td>
-          </tr>
-          <tr>
-            <td>X1</td>
-            <td>Y1</td>
-            <td>Z1</td>
-          </tr>
-          <tr>
-            <td>X2</td>
-            <td>Y2</td>
-            <td>Z2</td>
-          </tr>
-          <tr>
-            <td>X3</td>
-            <td>Y3</td>
-            <td>Z3</td>
-          </tr>
-        </tbody>
+          {filteredRows &&
+            filteredRows.map((row) => {
+              return (
+                <tr>
+                  <td>{row.id}</td>
+                  <td>{row.date}</td>
+                  <td>{row.branch}</td>
+                  <td>{row.type}</td>
+                  <td>{row.amount}</td>
+                  <td>{row.bank}</td>
+                  <td>
+                    {row.employeeName} <div>({row.employeeCode})</div>
+                  </td>
+                  <td>{row.status}</td>
+                  <td>
+                    <button onClick={() => deleteHandle(row.id)}>X</button>
+                  </td>
+                </tr>
+              );
+            })}
+        </tbody>{" "}
       </table>
+      {isEmpty(filteredRows) && (
+        <div
+          style={{ textAlign: "center", marginTop: "1rem", fontSize: "large" }}
+        >
+          No data found
+        </div>
+      )}
     </div>
   );
 }
