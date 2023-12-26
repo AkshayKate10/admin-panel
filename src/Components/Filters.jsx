@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import * as action from "../Store/Actions";
 
+import * as action from "../Store/Actions";
 import { branches, types, statuses } from "../Constants/constants";
 import { getMaxDate, getMinDate } from "../Helpers/utils";
 
@@ -8,7 +8,6 @@ function Filters({ allRows, dispatch, currentFilter, error }) {
   const [ID, setID] = useState("");
 
   const { fromDate, toDate, branch, type, status } = currentFilter;
-
   const { errorMessage } = error;
 
   const handleChange = (event, field) => {
@@ -57,10 +56,7 @@ function Filters({ allRows, dispatch, currentFilter, error }) {
             type="date"
             max={getMaxDate(allRows)}
             min={getMinDate(allRows)}
-            onChange={(e) => {
-              handleChange(e, "fromDate");
-              console.log(e.target.value);
-            }}
+            onChange={(e) => handleChange(e, "fromDate")}
             value={fromDate}
           />
         </div>
@@ -121,4 +117,5 @@ function Filters({ allRows, dispatch, currentFilter, error }) {
     </div>
   );
 }
+
 export default Filters;

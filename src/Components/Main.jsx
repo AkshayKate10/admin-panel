@@ -3,12 +3,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { mockData } from "../Mock/mock";
 import * as action from "../Store/Actions";
 
+// Components
 import Filters from "./Filters";
 import Table from "./Table";
 
 function Main() {
   const dispatch = useDispatch();
 
+  // Values from Redux store
   const filteredRows = useSelector((state) => state.filteredRows);
   const sortType = useSelector((state) => state.sortBy);
   const allRows = useSelector((state) => state.allRows);
@@ -18,6 +20,7 @@ function Main() {
   useEffect(() => {
     dispatch({ type: action.SET_DATA, value: mockData });
   }, []);
+
   return (
     <div>
       <Filters

@@ -34,6 +34,7 @@ function reducer(state = initialstate, action) {
         filteredRows: unSortedRows,
       };
     }
+
     case _.SET_CURRENT_FILTERS: {
       const {
         value: { value, field },
@@ -65,14 +66,13 @@ function reducer(state = initialstate, action) {
         },
       };
     }
+
     case _.SET_FILTERED_ROWS: {
       const {
         allRows,
         currentFilter: { fromDate, toDate, branch, type, status },
       } = state;
       const newRows = allRows.filter((row) => {
-        // row.fromDate === fromDate ||
-        // row.toDate === toDate ||
         return (
           (fromDate === ""
             ? true
@@ -105,6 +105,7 @@ function reducer(state = initialstate, action) {
         filteredRows: updatedFilteredRows,
       };
     }
+
     case _.SORT_ROWS: {
       const { sortBy, filteredRows } = state;
       let sortedRows, sortType;
@@ -126,8 +127,8 @@ function reducer(state = initialstate, action) {
 
     case _.FILTER_ROWS_BY_ID: {
       const { value } = action;
-      const { filteredRows } = state;
-      const newState = filteredRows.filter((row) => row.id === value);
+      const { allRows } = state;
+      const newState = allRows.filter((row) => row.id === value);
 
       return {
         ...state,

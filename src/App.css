@@ -42,10 +42,6 @@ select,
   border-bottom: 1px solid;
   width: 5rem;
 }
-/* #idInput:focus-visible {
-  border: none !important;
-  border-bottom: 1px solid;
-} */
 
 td,
 th {
