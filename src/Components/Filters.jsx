@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import * as action from "../Store/Actions";
 
 import { branches, types, statuses } from "../Constants/constants";
+import { getMaxDate, getMinDate } from "../Helpers/utils";
 
-function Filters({ allRows, dispatch, currentFilter }) {
+function Filters({ allRows, dispatch, currentFilter, error }) {
   const [ID, setID] = useState("");
 
   const { fromDate, toDate, branch, type, status } = currentFilter;
+
+  const { errorMessage } = error;
 
   const handleChange = (event, field) => {
     dispatch({
@@ -26,13 +29,15 @@ function Filters({ allRows, dispatch, currentFilter }) {
 
   useEffect(() => {
     dispatch({ type: action.SET_FILTERED_ROWS });
-  }, [branch, type, status]);
+  }, [fromDate, toDate, branch, type, status]);
 
   return (
     <div>
       <div className="allFilters">
         <div>
-          <label>Total ({allRows.length})</label>
+          <label>
+            <strong>Total ({allRows.length})</strong>
+          </label>
         </div>
         <div style={{ marginLeft: "auto" }}>
           <input
@@ -48,17 +53,24 @@ function Filters({ allRows, dispatch, currentFilter }) {
         <div className="filter">
           <label>From</label>
           <input
+            className="dateInput"
             type="date"
-            max={"2024-01-20"}
-            onChange={(e) => handleChange(e, "fromDate")}
+            max={getMaxDate(allRows)}
+            min={getMinDate(allRows)}
+            onChange={(e) => {
+              handleChange(e, "fromDate");
+              console.log(e.target.value);
+            }}
             value={fromDate}
           />
         </div>
         <div className="filter">
           <label>To</label>
           <input
+            className="dateInput"
             type="date"
-            max={"2024-01-20"}
+            max={getMaxDate(allRows)}
+            min={getMinDate(allRows)}
             onChange={(e) => handleChange(e, "toDate")}
             value={toDate}
           />
@@ -66,30 +78,45 @@ function Filters({ allRows, dispatch, currentFilter }) {
         <div className="filter">
           <label htmlFor="branch">Branch</label>
           <select onChange={(e) => handleChange(e, "branch")} value={branch}>
-            {branches.map((item) => {
-              return <option value={item.value}>{item.label}</option>;
+            {branches.map((item, index) => {
+              return (
+                <option key={index} value={item.value}>
+                  {item.label}
+                </option>
+              );
             })}
           </select>
         </div>
         <div className="filter">
           <label>Type</label>
           <select onChange={(e) => handleChange(e, "type")} value={type}>
-            {types.map((item) => {
-              return <option value={item.value}>{item.label}</option>;
+            {types.map((item, index) => {
+              return (
+                <option key={index} value={item.value}>
+                  {item.label}
+                </option>
+              );
             })}
           </select>
         </div>
         <div className="filter">
           <label>Status</label>
           <select onChange={(e) => handleChange(e, "status")} value={status}>
-            {statuses.map((item) => {
-              return <option value={item.value}>{item.label}</option>;
+            {statuses.map((item, index) => {
+              return (
+                <option key={index} value={item.value}>
+                  {item.label}
+                </option>
+              );
             })}
           </select>
         </div>
         <div className="filter" style={{ marginLeft: "auto" }}>
           <button onClick={onReset}>Clear Filter/Search</button>
         </div>
+      </div>
+      <div className="allFilters" style={{ color: "red" }}>
+        {errorMessage}
       </div>
     </div>
   );

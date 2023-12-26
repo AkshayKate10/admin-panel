@@ -29,9 +29,14 @@ table {
   width: 100%;
 }
 
-select {
-  min-width: 10rem;
+select,
+.dateInput {
+  min-width: 7rem;
+  background-color: white;
+  border: none;
+  border-bottom: 1px solid;
 }
+
 #idInput {
   border: none;
   border-bottom: 1px solid;

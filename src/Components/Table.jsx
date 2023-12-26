@@ -3,15 +3,19 @@ import { isEmpty } from "lodash";
 import { tableHeaders, sortLogo } from "../Constants/constants";
 import * as action from "../Store/Actions";
 
-function Table({ filteredRows, dispatch }) {
+function Table({ filteredRows, dispatch, error }) {
+  const { isError } = error;
+
   const deleteHandle = (id) => {
     dispatch({ type: action.DELETE_ROW, value: id });
   };
+
   const sortData = () => {
     dispatch({
       type: action.SORT_ROWS,
     });
   };
+
   return (
     <div>
       <table>
@@ -39,10 +43,11 @@ function Table({ filteredRows, dispatch }) {
           </tr>
         </thead>
         <tbody>
-          {filteredRows &&
-            filteredRows.map((row) => {
+          {!isError &&
+            filteredRows &&
+            filteredRows.map((row, index) => {
               return (
-                <tr>
+                <tr key={index}>
                   <td>{row.id}</td>
                   <td>{row.date}</td>
                   <td>{row.branch}</td>
@@ -61,7 +66,7 @@ function Table({ filteredRows, dispatch }) {
             })}
         </tbody>
       </table>
-      {isEmpty(filteredRows) && (
+      {(isError || isEmpty(filteredRows)) && (
         <div
           style={{ textAlign: "center", marginTop: "1rem", fontSize: "large" }}
         >

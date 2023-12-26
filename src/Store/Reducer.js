@@ -1,5 +1,6 @@
 import moment from "moment";
 import * as _ from "./Actions";
+import { validateDates } from "../Helpers/utils";
 
 const initialstate = {
   allRows: [],
@@ -10,6 +11,10 @@ const initialstate = {
     branch: "all",
     type: "all",
     status: "all",
+  },
+  error: {
+    isError: false,
+    errorMessage: "",
   },
   sortBy: "",
 };
@@ -33,11 +38,30 @@ function reducer(state = initialstate, action) {
       const {
         value: { value, field },
       } = action;
+      const {
+        allRows,
+        currentFilter: { fromDate, toDate },
+      } = state;
+      let errorMessage, isError;
+      if (field === "fromDate") {
+        let errorObj = validateDates(value, toDate, allRows);
+        errorMessage = errorObj.errorMessage;
+        isError = errorObj.isError;
+      }
+      if (field === "toDate") {
+        let errorObj = validateDates(fromDate, value, allRows);
+        errorMessage = errorObj.errorMessage;
+        isError = errorObj.isError;
+      }
       return {
         ...state,
         currentFilter: {
           ...state.currentFilter,
           [field]: value,
+        },
+        error: {
+          errorMessage,
+          isError,
         },
       };
     }
@@ -50,6 +74,14 @@ function reducer(state = initialstate, action) {
         // row.fromDate === fromDate ||
         // row.toDate === toDate ||
         return (
+          (fromDate === ""
+            ? true
+            : Number(moment(row.date, "DD/MM/YYYY").format("YYYYMMDD")) >=
+              Number(moment(fromDate, "YYYY-MM-DD").format("YYYYMMDD"))) &&
+          (toDate === ""
+            ? true
+            : Number(moment(row.date, "DD/MM/YYYY").format("YYYYMMDD")) <=
+              Number(moment(toDate, "YYYY-MM-DD").format("YYYYMMDD"))) &&
           (branch === "all" ? true : row.branch === branch) &&
           (type === "all" ? true : row.type === type) &&
           (status === "all" ? true : row.status === status)
@@ -110,8 +142,10 @@ function reducer(state = initialstate, action) {
         ...state,
         filteredRows: allRows,
         currentFilter: initialstate.currentFilter,
+        error: initialstate.error,
       };
     }
+
     default:
       return state;
   }

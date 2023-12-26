@@ -13,6 +13,7 @@ function Main() {
   const sortType = useSelector((state) => state.sortBy);
   const allRows = useSelector((state) => state.allRows);
   const currentFilter = useSelector((state) => state.currentFilter);
+  const error = useSelector((state) => state.error);
 
   useEffect(() => {
     dispatch({ type: action.SET_DATA, value: mockData });
@@ -23,11 +24,13 @@ function Main() {
         allRows={allRows}
         dispatch={dispatch}
         currentFilter={currentFilter}
+        error={error}
       />
       <Table
         filteredRows={filteredRows}
         sortType={sortType}
         dispatch={dispatch}
+        error={error}
       />
     </div>
   );
