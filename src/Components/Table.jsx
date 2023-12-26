@@ -1,13 +1,16 @@
 import React from "react";
 import { isEmpty } from "lodash";
 import { tableHeaders, sortLogo } from "../Constants/constants";
-import { useDispatch } from "react-redux";
 import * as action from "../Store/Actions";
 
-function Table({ filteredRows, allRows }) {
-  const dispatch = useDispatch();
+function Table({ filteredRows, dispatch }) {
   const deleteHandle = (id) => {
     dispatch({ type: action.DELETE_ROW, value: id });
+  };
+  const sortData = () => {
+    dispatch({
+      type: action.SORT_ROWS,
+    });
   };
   return (
     <div>
@@ -15,14 +18,23 @@ function Table({ filteredRows, allRows }) {
         <thead>
           <tr key="table-headings">
             {tableHeaders.map((tableHead, index) => {
-              if (tableHead === "DATE")
+              if (tableHead.label === "DATE")
                 return (
-                  <th key={index} className="date-header">
-                    {tableHead} {sortLogo}
+                  <th
+                    key={index}
+                    className="date-header"
+                    onClick={sortData}
+                    style={{ minWidth: tableHead.minWidth }}
+                  >
+                    {tableHead.label} {sortLogo}
                   </th>
                 );
 
-              return <th key={index}>{tableHead}</th>;
+              return (
+                <th key={index} style={{ minWidth: tableHead.minWidth }}>
+                  {tableHead.label}
+                </th>
+              );
             })}
           </tr>
         </thead>
@@ -47,7 +59,7 @@ function Table({ filteredRows, allRows }) {
                 </tr>
               );
             })}
-        </tbody>{" "}
+        </tbody>
       </table>
       {isEmpty(filteredRows) && (
         <div
