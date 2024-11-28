@@ -19,6 +19,7 @@ function Main() {
 
   useEffect(() => {
     dispatch({ type: action.SET_DATA, value: mockData });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -28,6 +28,7 @@ function Filters({ allRows, dispatch, currentFilter, error }) {
 
   useEffect(() => {
     dispatch({ type: action.SET_FILTERED_ROWS });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [fromDate, toDate, branch, type, status]);
 
   return (
