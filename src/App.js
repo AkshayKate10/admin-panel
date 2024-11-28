@@ -6,7 +6,7 @@ import Main from "./Components/Main";
 
 function App() {
   useEffect(() => {
-    document.title = "akshay";
+    document.title = "Admin-Panel";
   }, []);
   return (
     <Provider store={reduxstore}>
