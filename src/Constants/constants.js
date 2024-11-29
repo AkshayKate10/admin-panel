@@ -32,7 +32,7 @@ export const tableHeaders = [
   { label: "BANK", minWidth: "200px" },
   { label: "REQUESTED BY (EMPLOYEE CODE)", minWidth: "200px" },
   { label: "STATUS", minWidth: "50px" },
-  { label: "", minWidth: "10px" },
+  { label: "ACTION", minWidth: "10px" },
 ];
 
 export const sortLogo = (
